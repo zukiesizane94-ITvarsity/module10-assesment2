@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+       <title>My Reciepe Book | Meals</title>
+        <link rel="stylesheet" href="style.css">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="fontAwesome/css/all.css">
+    </head>
+    <body class="body-meals" onload="getRecipeList()">
+        <div class="header">
+           <a href="index.html">
+            <i class="fas fa-arrow-left"></i>
+            </a>
+            
+            <img src="images/logo-text.png">
+        </div>
+        
+        <div id="meals">
+           
+           <div class="meals-list" id="output">
+               
+           </div>
+           
+        </div>
+        
+        <script>
+            var category = getCategory();
+            
+            function getRecipeList(){
+                var rootPath = "https://mysite.itvarsity.org/api/recipe-book/";
+                var fullPath = rootPath + "get-recipes/?category=" + category;
+                
+                fetch(fullPath)
+                  .then(function(response){
+                    return response.json();
+                })
+                  .then(function(data){
+                     var output = "";
+                     for(a = 0; a < data.length; a++){
+                      output += `
+                        <a href="show-recipe.html?id=${data[a].id}">
+                           <div class="meals-list-item">
+                              <h1>${data[a].title}  <i class="fas fa-chevron-circle-right"></i></h1>
+                              <p>${data[a].description}</p>
+                          </div>
+                        </a>
+                      `;   
+                     } 
+                    
+                      document.getElementById("output").innerHTML = output;      
+                })
+            }
+            
+                function getCategory(){
+                 var url = window.location.href;
+                 var pos = url.search("=");
+                 var category = url.slice(pos + 1);
+               
+                 return category;
+           }
+     </script>
+     </body>
+</html>
